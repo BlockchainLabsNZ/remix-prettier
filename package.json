@@ -1,11 +1,22 @@
 {
   "name": "remix-plugin-prettier",
-  "version": "0.1.0",
+  "version": "1.0.0-alpha.1",
+  "description": "A plugin for Remix, Ethereum-IDE that will apply formatting rules on Solidity code based on industry best practices. ",
   "private": true,
+  "author": "Klaus Hott <klahott@gmail.com>",
+  "license": "MIT",
   "dependencies": {
+    "bootstrap": "^4.3.1",
+    "console-feed": "^2.8.8",
+    "prettier-plugin-solidity": "^1.0.0-alpha.22",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "remix-plugin": "^0.0.2-alpha.11",
+    "styled-components": "^4.3.1"
+  },
+  "devDependencies": {
+    "prettier": "^1.18.2"
   },
   "scripts": {
     "start": "react-scripts start",
