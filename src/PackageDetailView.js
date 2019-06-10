@@ -21,10 +21,7 @@ const PackageDetailView = () => (
           <div className="meta">
             <div className="meta-user">
               <a href="https://atom.io/users/prettier">
-                <img
-                  className="avatar"
-                  src="file:///Users/klaushottvidal/Library/Application Support/Atom/Cache/settings-view/prettier-1559992242149"
-                />
+                <img className="avatar" src="/logo.png" />
               </a>
               <a className="author" href="https://atom.io/users/prettier">
                 prettier

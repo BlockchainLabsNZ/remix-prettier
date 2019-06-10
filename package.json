@@ -6,7 +6,9 @@
   "author": "Klaus Hott <klahott@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@githubprimer/octicons-react": "^8.5.0",
     "bootstrap": "^4.3.1",
+    "classnames": "^2.2.6",
     "console-feed": "^2.8.8",
     "prettier-plugin-solidity": "^1.0.0-alpha.22",
     "react": "^16.8.6",

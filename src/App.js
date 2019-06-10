@@ -1,35 +1,73 @@
 import React, { useState, useEffect } from "react";
-import { Hook, Console, Decode } from "console-feed";
-import { createIframeClient, remixApi, AppManagerApi } from "remix-plugin";
+import classNames from "classnames";
+import { createIframeClient, remixApi } from "remix-plugin";
+import "./prettier/style.css";
+import prettier from "prettier/standalone";
+import prettierSolidity from "prettier-plugin-solidity";
 import Header from "./Header";
 import PackageDetailView from "./PackageDetailView";
 
 const App = () => {
-  const [logs, setLogs] = useState([]);
+  const [currentFile, setCurrentFile] = useState("");
+  const [client, setClient] = useState(
+    createIframeClient({
+      customApi: remixApi,
+      devMode: { port: 8080 }
+    })
+  );
 
   useEffect(() => {
-    Hook(window.console, log => {
-      setLogs(logs => [...logs, Decode(log)]);
-    });
-  }, []);
+    const subscribeToCurrentFile = async () => {
+      await client.onload(() => {
+        client.fileManager.on("currentFileChanged", fileName =>
+          setCurrentFile(fileName)
+        );
+      });
 
-  useEffect(() => {
-    const devMode = { port: 8080 };
-    let client = createIframeClient({ customApi: remixApi, devMode });
+      client.call(
+        "fileManager",
+        "setFile",
+        "browser/hello-world",
+        "Hello World"
+      );
+    };
+    subscribeToCurrentFile();
+  }, [client]);
 
-    client.onload(() => {
-      console.log(client);
-      console.log(AppManagerApi);
-    });
-  }, []);
+  const onClick = async () => {
+    let content = await client.fileManager.getFile(currentFile);
+
+    await client.fileManager.setFile(
+      currentFile,
+      prettier.format(content, {
+        parser: "solidity-parse",
+        plugins: [prettierSolidity]
+      })
+    );
+  };
+
   return (
     <>
-      <Header />
       <div className="panels-item">
         <section className="section">
           <PackageDetailView />
         </section>
-        <section className="section settings-panel">
+        <section className="section settings-panel p-2">
+          <button
+            title="Prettify"
+            className={classNames("btn", "btn-primary", "btn-block", {
+              disabled: currentFile.length === -10
+            })}
+            onClick={() => {
+              onClick();
+            }}
+            disabled={currentFile.length === -10}
+          >
+            <span>
+              <span className="icon-prettier" /> Prettify{" "}
+              {currentFile.length ? currentFile : "<no file selected>"}
+            </span>
+          </button>
           <div className="section-container">
             <div className="block section-heading icon icon-gear">Settings</div>
             <div className="section-body">
@@ -100,7 +138,7 @@ const App = () => {
                     <h3 className="sub-section-heading has-items">
                       Format on Save
                     </h3>
-                    <div className="setting-description"></div>
+                    <div className="setting-description" />
                     <div className="sub-section-body">
                       <div className="control-group">
                         <div className="controls">
@@ -293,7 +331,7 @@ const App = () => {
                     <h3 className="sub-section-heading has-items">
                       prettier-eslint options
                     </h3>
-                    <div className="setting-description"></div>
+                    <div className="setting-description" />
                     <div className="sub-section-body">
                       <div className="control-group">
                         <div className="controls">
@@ -342,7 +380,7 @@ const App = () => {
           </div>
           <table
             className="package-keymap-table table native-key-bindings text"
-            tabindex="-1"
+            tabIndex="-1"
           >
             <thead>
               <tr>
@@ -359,20 +397,16 @@ const App = () => {
                 data-command="prettier:format"
               >
                 <td>
-                  <span className="icon icon-clippy copy-icon"></span>
+                  <span className="icon icon-clippy copy-icon" />
                   <span>ctrl-alt-f</span>
                 </td>
                 <td>prettier:format</td>
                 <td>atom-text-editor</td>
-                <td></td>
+                <td />
               </tr>
             </tbody>
           </table>
         </section>
-      </div>
-
-      <div style={{ backgroundColor: "#242424" }}>
-        <Console logs={logs} variant="dark" />
       </div>
     </>
   );

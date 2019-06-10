@@ -1,0 +1,30 @@
+@font-face {
+  font-family: "prettier";
+  src: url("fonts/prettier.eot?at0poq");
+  src: url("fonts/prettier.eot?at0poq#iefix") format("embedded-opentype"),
+    url("fonts/prettier.ttf?at0poq") format("truetype"),
+    url("fonts/prettier.woff?at0poq") format("woff"),
+    url("fonts/prettier.svg?at0poq#prettier") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "prettier" !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-prettier:before {
+  content: "\e900";
+}
