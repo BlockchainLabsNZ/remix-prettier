@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/BlockchainLabsNZ/remix-prettier/static/css/main.0b6788b2.chunk.css",
+    "main.js": "/BlockchainLabsNZ/remix-prettier/static/js/main.61c9cc19.chunk.js",
+    "main.js.map": "/BlockchainLabsNZ/remix-prettier/static/js/main.61c9cc19.chunk.js.map",
+    "runtime~main.js": "/BlockchainLabsNZ/remix-prettier/static/js/runtime~main.0e28ad00.js",
+    "runtime~main.js.map": "/BlockchainLabsNZ/remix-prettier/static/js/runtime~main.0e28ad00.js.map",
+    "static/css/2.22a7d4ef.chunk.css": "/BlockchainLabsNZ/remix-prettier/static/css/2.22a7d4ef.chunk.css",
+    "static/js/2.cf318ce7.chunk.js": "/BlockchainLabsNZ/remix-prettier/static/js/2.cf318ce7.chunk.js",
+    "static/js/2.cf318ce7.chunk.js.map": "/BlockchainLabsNZ/remix-prettier/static/js/2.cf318ce7.chunk.js.map",
+    "index.html": "/BlockchainLabsNZ/remix-prettier/index.html",
+    "precache-manifest.66115b605d44039893fc085054b0ad8a.js": "/BlockchainLabsNZ/remix-prettier/precache-manifest.66115b605d44039893fc085054b0ad8a.js",
+    "service-worker.js": "/BlockchainLabsNZ/remix-prettier/service-worker.js",
+    "static/css/2.22a7d4ef.chunk.css.map": "/BlockchainLabsNZ/remix-prettier/static/css/2.22a7d4ef.chunk.css.map",
+    "static/css/main.0b6788b2.chunk.css.map": "/BlockchainLabsNZ/remix-prettier/static/css/main.0b6788b2.chunk.css.map",
+    "static/media/style.css": "/BlockchainLabsNZ/remix-prettier/static/media/prettier.842efcd0.svg"
+  }
+}
