@@ -1,20 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import classNames from "classnames";
-import { createIframeClient, remixApi } from "remix-plugin";
+import {createIframeClient, remixApi} from "remix-plugin";
 import "./prettier/style.css";
 import prettier from "prettier/standalone";
 import prettierSolidity from "prettier-plugin-solidity";
-import Header from "./Header";
+// import Header from "./Header";
 import PackageDetailView from "./PackageDetailView";
+
+const client = createIframeClient({
+  customApi: remixApi,
+  devMode: {port: 8080}
+});
 
 const App = () => {
   const [currentFile, setCurrentFile] = useState("");
-  const [client, setClient] = useState(
-    createIframeClient({
-      customApi: remixApi,
-      devMode: { port: 8080 }
-    })
-  );
+  const [printWidth, setPrintWidth] = useState(80);
+  const [tabWidth, setTabWidth] = useState(4);
+  const [useTabs, setUseTabs] = useState(false);
+  const [singleQuote, setSingleQuote] = useState(false);
+  const [explicitTypes, setExplicitTypes] = useState("always");
+  const [spacedExp, setSpacedExp] = useState(false);
 
   useEffect(() => {
     const subscribeToCurrentFile = async () => {
@@ -23,392 +28,170 @@ const App = () => {
           setCurrentFile(fileName)
         );
       });
-
-      client.call(
-        "fileManager",
-        "setFile",
-        "browser/hello-world",
-        "Hello World"
-      );
     };
     subscribeToCurrentFile();
-  }, [client]);
+  }, []);
 
   const onClick = async () => {
-    let content = await client.fileManager.getFile(currentFile);
-
-    await client.fileManager.setFile(
-      currentFile,
-      prettier.format(content, {
-        parser: "solidity-parse",
-        plugins: [prettierSolidity]
-      })
-    );
+    const content = await client.call("fileManager", "getFile", currentFile);
+    const prettified = prettier.format(content, {
+      parser: "solidity-parse",
+      plugins: [prettierSolidity],
+      printWidth,
+      tabWidth,
+      useTabs,
+      singleQuote,
+      explicitTypes,
+      spacedExp
+    });
+    client.fileManager.setFile(currentFile, prettified);
   };
 
   return (
-    <>
-      <div className="panels-item">
-        <section className="section">
-          <PackageDetailView />
-        </section>
-        <section className="section settings-panel p-2">
-          <button
-            title="Prettify"
-            className={classNames("btn", "btn-primary", "btn-block", {
-              disabled: currentFile.length === -10
-            })}
-            onClick={() => {
-              onClick();
-            }}
-            disabled={currentFile.length === -10}
-          >
-            <span>
-              <span className="icon-prettier" /> Prettify{" "}
-              {currentFile.length ? currentFile : "<no file selected>"}
-            </span>
-          </button>
-          <div className="section-container">
-            <div className="block section-heading icon icon-gear">Settings</div>
-            <div className="section-body">
-              <div className="control-group">
-                <div className="controls">
-                  <div className="checkbox">
-                    <label>
-                      <input
-                        id="prettier-atom.useEslint"
-                        type="checkbox"
-                        className="input-checkbox"
-                        data-original-title=""
-                        title=""
-                      />
-                      <div className="setting-title">ESLint Integration</div>
-                    </label>
-                    <div className="setting-description">
-                      Use
-                      <a href="https://github.com/prettier/prettier-eslint">
-                        prettier-eslint
-                      </a>
-                      to infer your Prettier settings based on your ESLint
-                      config and run eslint --fix after prettier formats the
-                      document. If we cannot infer a Prettier setting from your
-                      ESLint config (or if there is none in the current
-                      project), we will fallback to using your settings in the
-                      <em>Prettier Options</em> section.
-                      <br />
-                      <br />
-                      <strong>Note:</strong>
-                      If you enable <em>Format on Save</em>, we recommend
-                      disabling ESlint's auto-fix to prevent fixing your code
-                      twice.
-                    </div>
-                  </div>
+    <div className="panels-item">
+      <section className="section">
+        <PackageDetailView />
+      </section>
+      <section className="section settings-panel p-2">
+        <div className="button-container">
+          <form className="form-inline">
+            <ul className="list-group list-group-flush">
+              <div className="list-group-item form-group">
+                <label
+                  className="mr-1"
+                  htmlFor="printWidth"
+                  title="The line length where Prettier will try wrap."
+                >
+                  --print-width
+                </label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="printWidth"
+                  value={printWidth}
+                  onChange={e => setPrintWidth(parseInt(e.target.value))}
+                />
+              </div>
+              <div className="list-group-item form-group">
+                <label
+                  className="mr-1"
+                  htmlFor="tabWidth"
+                  title="Number of spaces per indentation level."
+                >
+                  --tab-width
+                </label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="tabWidth"
+                  value={tabWidth}
+                  onChange={e => setTabWidth(parseInt(e.target.value))}
+                />
+              </div>
+              <div className="list-group-item form-group">
+                <div className="checkbox">
+                  <label
+                    className="form-check-label"
+                    title="Indent with tabs instead of spaces."
+                  >
+                    <input
+                      type="checkbox"
+                      id="useTabs"
+                      className="form-check-input"
+                      checked={useTabs}
+                      onChange={() => setUseTabs(!useTabs)}
+                    />
+                    --use-tabs
+                  </label>
                 </div>
               </div>
-              <div className="control-group">
-                <div className="controls">
-                  <div className="checkbox">
-                    <label>
-                      <input
-                        id="prettier-atom.useStylelint"
-                        type="checkbox"
-                        className="input-checkbox"
-                        data-original-title=""
-                        title=""
-                      />
-                      <div className="setting-title">Stylelint Integration</div>
-                    </label>
-                    <div className="setting-description">
-                      Use
-                      <a href="https://github.com/hugomrdias/prettier-stylelint">
-                        prettier-stylelint
-                      </a>
-                      to infer your Prettier settings based on your Stylelint
-                      config. If we cannot infer a Prettier setting from your
-                      Stylelint config (or if there is none in the current
-                      project), we will fallback to using your settings in the
-                      <em>Prettier Options</em> section.
-                    </div>
-                  </div>
+              <div className="list-group-item form-group">
+                <div className="checkbox">
+                  <label
+                    className="form-check-label"
+                    title="Use single quotes instead of double quotes."
+                  >
+                    <input
+                      type="checkbox"
+                      id="singleQuote"
+                      className="form-check-input"
+                      checked={singleQuote}
+                      onChange={() => setSingleQuote(!singleQuote)}
+                    />
+                    --single-quote
+                  </label>
                 </div>
               </div>
-              <div className="control-group">
-                <div className="controls">
-                  <section className="sub-section">
-                    <h3 className="sub-section-heading has-items">
-                      Format on Save
-                    </h3>
-                    <div className="setting-description" />
-                    <div className="sub-section-body">
-                      <div className="control-group">
-                        <div className="controls">
-                          <div className="checkbox">
-                            <label>
-                              <input
-                                id="prettier-atom.formatOnSaveOptions.enabled"
-                                type="checkbox"
-                                className="input-checkbox"
-                                data-original-title=""
-                                title=""
-                              />
-                              <div className="setting-title">
-                                Format Files on Save
-                              </div>
-                            </label>
-                            <div className="setting-description">
-                              Automatically format entire file when saving.
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="control-group">
-                        <div className="controls">
-                          <div className="checkbox">
-                            <label>
-                              <input
-                                id="prettier-atom.formatOnSaveOptions.respectEslintignore"
-                                type="checkbox"
-                                className="input-checkbox"
-                                data-original-title=""
-                                title=""
-                              />
-                              <div className="setting-title">
-                                Ignore Files in `.eslintignore`
-                              </div>
-                            </label>
-                            <div className="setting-description">
-                              Works regardless of whether
-                              <em>ESLint Integration</em> is enabled or not.
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="control-group">
-                        <div className="controls">
-                          <div className="checkbox">
-                            <label>
-                              <input
-                                id="prettier-atom.formatOnSaveOptions.showInStatusBar"
-                                type="checkbox"
-                                className="input-checkbox"
-                                data-original-title=""
-                                title=""
-                              />
-                              <div className="setting-title">
-                                Show in Status Bar
-                              </div>
-                            </label>
-                            <div className="setting-description">
-                              Show in status bar if <em>Format on Save</em> is
-                              enabled or not.
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="control-group">
-                        <div className="controls">
-                          <label className="control-label">
-                            <div className="setting-title">
-                              Exclude (list of globs)
-                            </div>
-                            <div className="setting-description">
-                              A list of
-                              <a href="https://git-scm.com/docs/gitignore">
-                                .gitignore style
-                              </a>
-                              file globs to exclude from formatting on save
-                              (takes precedence over scopes). Use commas to
-                              separate each glob.
-                            </div>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="control-group">
-                        <div className="controls">
-                          <label className="control-label">
-                            <div className="setting-title">
-                              Include (list of globs)
-                            </div>
-                            <div className="setting-description">
-                              A list of
-                              <a href="https://git-scm.com/docs/gitignore">
-                                .gitignore style
-                              </a>
-                              file globs to always format on save (takes
-                              precedence over scopes and excluded globs). Use
-                              commas to separate each glob.
-                              <br />
-                              <br />
-                              <strong>Note:</strong>
-                              If there are globs in this list, files not
-                              matching the globs will not be formatted on save,
-                              regardless of other options.
-                            </div>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="control-group">
-                        <div className="controls">
-                          <div className="checkbox">
-                            <label>
-                              <input
-                                id="prettier-atom.formatOnSaveOptions.isDisabledIfNotInPackageJson"
-                                type="checkbox"
-                                className="input-checkbox"
-                                data-original-title=""
-                                title=""
-                              />
-                              <div className="setting-title">
-                                Only format if Prettier is found in your
-                                project's dependencies
-                              </div>
-                            </label>
-                            <div className="setting-description">
-                              Only format on save when <code>prettier</code> (or
-                              <code>prettier-eslint</code>/
-                              <code>prettier-eslint-cli</code>
-                              if using <em>ESLint integration</em>) is in your
-                              project's <code>package.json</code> (dependencies
-                              or devDependencies)
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="control-group">
-                        <div className="controls">
-                          <div className="checkbox">
-                            <label>
-                              <input
-                                id="prettier-atom.formatOnSaveOptions.isDisabledIfNoConfigFile"
-                                type="checkbox"
-                                className="input-checkbox"
-                                data-original-title=""
-                                title=""
-                              />
-                              <div className="setting-title">
-                                Only format if a Prettier config is found
-                              </div>
-                            </label>
-                            <div className="setting-description">
-                              Only format on save if we find a
-                              <code>.prettierrc</code> file (written in YAML or
-                              JSON), a <code>prettier.config.js</code> file that
-                              exports an object, or a 'prettier' key in your
-                              <code>package.json</code> file.
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="control-group">
-                        <div className="controls">
-                          <div className="checkbox">
-                            <label>
-                              <input
-                                id="prettier-atom.formatOnSaveOptions.ignoreNodeModules"
-                                type="checkbox"
-                                className="input-checkbox"
-                                data-original-title=""
-                                title=""
-                              />
-                              <div className="setting-title">
-                                Ignore Files in `node_modules`
-                              </div>
-                            </label>
-                            <div className="setting-description">
-                              Ignores Files in <code>node_modules</code> from
-                              format on save.
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
+              <div className="list-group-item form-group">
+                <label
+                  for="explicitTypes"
+                  title="Change when type aliases are used."
+                >
+                  --explicit-types
+                </label>
+                <select
+                  class="form-control"
+                  id="explicitTypes"
+                  value={explicitTypes}
+                  onChange={e => setExplicitTypes(e.target.value)}
+                >
+                  <option
+                    value="always"
+                    title="Prefer the explicit types `uint256`, `int256`, and `bytes1`."
+                  >
+                    Always
+                  </option>
+                  <option
+                    value="never"
+                    title="Prefer the type aliases `uint`, `int`, and `byte`."
+                  >
+                    Never
+                  </option>
+                  <option
+                    value="preserve"
+                    title="Respect the type used by the developer."
+                  >
+                    Preserve
+                  </option>
+                </select>
+              </div>
+              <div className="list-group-item form-group">
+                <div className="checkbox">
+                  <label className="form-check-label">
+                    <input
+                      type="checkbox"
+                      id="spacedExp"
+                      className="form-check-input"
+                      checked={spacedExp}
+                      onChange={() => setSpacedExp(!spacedExp)}
+                    />
+                    --spaced-exp
+                  </label>
                 </div>
               </div>
-              <div className="control-group">
-                <div className="controls">
-                  <section className="sub-section">
-                    <h3 className="sub-section-heading has-items">
-                      prettier-eslint options
-                    </h3>
-                    <div className="setting-description" />
-                    <div className="sub-section-body">
-                      <div className="control-group">
-                        <div className="controls">
-                          <div className="checkbox">
-                            <label>
-                              <input
-                                id="prettier-atom.prettierEslintOptions.prettierLast"
-                                type="checkbox"
-                                className="input-checkbox"
-                                data-original-title=""
-                                title=""
-                              />
-                              <div className="setting-title">
-                                Run Prettier Last
-                              </div>
-                            </label>
-                            <div className="setting-description">
-                              Run <code>eslint =&gt; prettier</code> instead of
-                              <code>prettier =&gt; eslint</code>.
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                </div>
+              <div className="list-group-item form-group">
+                <button
+                  title="Prettify"
+                  className={classNames("btn", "btn-primary", "btn-block", {
+                    disabled: currentFile.length === 0
+                  })}
+                  onClick={event => {
+                    event.preventDefault();
+                    onClick();
+                  }}
+                  disabled={currentFile.length === 0}
+                >
+                  <span>
+                    <span className="icon-prettier" /> Prettify{" "}
+                    {currentFile.length ? currentFile : "<no file selected>"}
+                  </span>
+                </button>
               </div>
-            </div>
-          </div>
-        </section>
-        <section className="section">
-          <div className="section-heading icon icon-keyboard">Keybindings</div>
-          <div className="checkbox">
-            <label>
-              <input
-                id="toggleKeybindings"
-                className="input-checkbox"
-                type="checkbox"
-              />
-              <div className="setting-title">Enable</div>
-            </label>
-            <div className="setting-description">
-              Disable this if you want to bind your own keystrokes for this
-              package's commands in your keymap.
-            </div>
-          </div>
-          <table
-            className="package-keymap-table table native-key-bindings text"
-            tabIndex="-1"
-          >
-            <thead>
-              <tr>
-                <th>Keystroke</th>
-                <th>Command</th>
-                <th>Selector</th>
-                <th>Source</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                data-selector="atom-text-editor"
-                data-keystrokes="ctrl-alt-f"
-                data-command="prettier:format"
-              >
-                <td>
-                  <span className="icon icon-clippy copy-icon" />
-                  <span>ctrl-alt-f</span>
-                </td>
-                <td>prettier:format</td>
-                <td>atom-text-editor</td>
-                <td />
-              </tr>
-            </tbody>
-          </table>
-        </section>
-      </div>
-    </>
+            </ul>
+          </form>
+        </div>
+      </section>
+    </div>
   );
 };
 

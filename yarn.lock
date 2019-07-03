@@ -7860,10 +7860,10 @@ prelude-ls@~1.1.2:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
   integrity sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=
 
-prettier-plugin-solidity@^1.0.0-alpha.22:
-  version "1.0.0-alpha.22"
-  resolved "https://registry.yarnpkg.com/prettier-plugin-solidity/-/prettier-plugin-solidity-1.0.0-alpha.22.tgz#9aaaba7633a289899a1ca55869f1923222482466"
-  integrity sha512-or5obRHYvdpJhVOU4cMFMsKH47S90GSE68hznLhaeAPuGQqk2jXpd/pbuQE/nzNljphBNDcm+xXy3Ot48vXiIQ==
+"prettier-plugin-solidity@git@github.com:BlockchainLabsNZ/prettier-plugin-solidity.git#standalone":
+  version "1.0.0-alpha.25"
+  resolved "https://registry.yarnpkg.com/prettier-plugin-solidity/-/prettier-plugin-solidity-1.0.0-alpha.25.tgz#45b5c7aa68f69f2aa160cd1d2590c459cd89e6d4"
+  integrity sha512-NsjhpK/td17apZz8Jnp5FDzIvXyrTGqKIg7PNrpLcKMi+XBDoMV/sFrWiN1VLI4oqjHnDJo/e4VhALiUCBHfBQ==
   dependencies:
     dir-to-object "^2.0.0"
     emoji-regex "^7.0.3"
@@ -7871,7 +7871,7 @@ prettier-plugin-solidity@^1.0.0-alpha.22:
     extract-comments "^1.1.0"
     prettier "^1.15.3"
     semver "^5.6.0"
-    solidity-parser-antlr "^0.4.0"
+    solidity-parser-antlr "^0.4.4"
     string-width "^3.0.0"
 
 prettier@^1.15.3:
@@ -8956,10 +8956,10 @@ sockjs@0.3.19:
     faye-websocket "^0.10.0"
     uuid "^3.0.1"
 
-solidity-parser-antlr@^0.4.0:
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/solidity-parser-antlr/-/solidity-parser-antlr-0.4.3.tgz#ff452a8e45c24cb982717bda207cbb633733371d"
-  integrity sha512-+0Sm/NCrYxCouzT8lJPrM2T8vT3PPW0enlHtAnxDgv/lBUjymHeFfEPjaNdwCNueR9w/lUOv7ivDm8ypHUcZMQ==
+solidity-parser-antlr@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/solidity-parser-antlr/-/solidity-parser-antlr-0.4.4.tgz#a31bc81776dc05190624a3a6542fc5363aa4540c"
+  integrity sha512-c81AaoyerDqjWkEs202suHgXfEtHmJtVQ8+PikjwyE1qsqewkmjOyuHhDAAbixZypIJGz/5Hx/KYisx/lYEd/w==
 
 source-list-map@^2.0.0:
   version "2.0.1"
