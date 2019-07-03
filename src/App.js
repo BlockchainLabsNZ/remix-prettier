@@ -3,6 +3,7 @@ import classNames from "classnames";
 import {createIframeClient, remixApi} from "remix-plugin";
 import "./prettier/style.css";
 import prettier from "prettier/standalone";
+import prettierJavascript from "prettier/parser-babylon";
 import prettierSolidity from "prettier-plugin-solidity";
 // import Header from "./Header";
 import PackageDetailView from "./PackageDetailView";
@@ -124,13 +125,13 @@ const App = () => {
               </div>
               <div className="list-group-item form-group">
                 <label
-                  for="explicitTypes"
+                  htmlFor="explicitTypes"
                   title="Change when type aliases are used."
                 >
                   --explicit-types
                 </label>
                 <select
-                  class="form-control"
+                  className="form-control"
                   id="explicitTypes"
                   value={explicitTypes}
                   onChange={e => setExplicitTypes(e.target.value)}
@@ -168,6 +169,35 @@ const App = () => {
                     --spaced-exp
                   </label>
                 </div>
+              </div>
+              <div className="list-group-item form-group">
+                <a
+                  title="To use in your projects."
+                  className="btn btn-primary btn-block"
+                  href={URL.createObjectURL(
+                    new Blob(
+                      [
+                        prettier.format(
+                          `module.exports = ${JSON.stringify({
+                            printWidth,
+                            tabWidth,
+                            useTabs,
+                            singleQuote,
+                            explicitTypes,
+                            spacedExp
+                          })}`,
+                          {parser: "babel", plugins: [prettierJavascript]}
+                        )
+                      ],
+                      {
+                        type: "application/json"
+                      }
+                    )
+                  )}
+                  download="prettier.config.js"
+                >
+                  <span>Download configuration</span>
+                </a>
               </div>
               <div className="list-group-item form-group">
                 <button

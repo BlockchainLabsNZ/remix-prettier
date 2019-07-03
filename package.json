@@ -14,7 +14,7 @@
     "bootstrap": "^4.3.1",
     "classnames": "^2.2.6",
     "console-feed": "^2.8.8",
-    "prettier-plugin-solidity": "git@github.com:BlockchainLabsNZ/prettier-plugin-solidity.git#standalone",
+    "prettier-plugin-solidity": "BlockchainLabsNZ/prettier-plugin-solidity.git#standalone",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
