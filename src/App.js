@@ -18,7 +18,8 @@ const App = () => {
   const [printWidth, setPrintWidth] = useState(80);
   const [tabWidth, setTabWidth] = useState(4);
   const [useTabs, setUseTabs] = useState(false);
-  const [singleQuote, setSingleQuote] = useState(false);
+  // const [singleQuote, setSingleQuote] = useState(false);
+  const [bracketSpacing, setBracketSpacing] = useState(false);
   const [explicitTypes, setExplicitTypes] = useState("always");
   const [spacedExp, setSpacedExp] = useState(false);
 
@@ -41,7 +42,7 @@ const App = () => {
       printWidth,
       tabWidth,
       useTabs,
-      singleQuote,
+      bracketSpacing,
       explicitTypes,
       spacedExp
     });
@@ -110,16 +111,16 @@ const App = () => {
                 <div className="checkbox">
                   <label
                     className="form-check-label"
-                    title="Use single quotes instead of double quotes."
+                    title="Do not print spaces between brackets."
                   >
                     <input
                       type="checkbox"
-                      id="singleQuote"
+                      id="bracketSpacing"
                       className="form-check-input"
-                      checked={singleQuote}
-                      onChange={() => setSingleQuote(!singleQuote)}
+                      checked={!bracketSpacing}
+                      onChange={() => setBracketSpacing(!bracketSpacing)}
                     />
-                    --single-quote
+                    --no-bracket-spacing
                   </label>
                 </div>
               </div>
@@ -178,19 +179,23 @@ const App = () => {
                     new Blob(
                       [
                         prettier.format(
-                          `module.exports = ${JSON.stringify({
-                            printWidth,
-                            tabWidth,
-                            useTabs,
-                            singleQuote,
-                            explicitTypes,
-                            spacedExp
-                          })}`,
+                          `// https://prettier.io/docs/en/configuration.html
+module.exports = {
+  // Global configuration
+  printWidth: ${JSON.stringify(printWidth)},
+  tabWidth: ${JSON.stringify(tabWidth)},
+  useTabs: ${JSON.stringify(useTabs)},
+  // Common configuration
+  bracketSpacing: ${JSON.stringify(bracketSpacing)},
+  // Solidity configuration
+  explicitTypes: ${JSON.stringify(explicitTypes)},
+  spacedExp: ${JSON.stringify(spacedExp)}
+}`,
                           {parser: "babel", plugins: [prettierJavascript]}
                         )
                       ],
                       {
-                        type: "application/json"
+                        type: "application/javascript"
                       }
                     )
                   )}
