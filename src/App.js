@@ -4,6 +4,7 @@ import {createIframeClient, remixApi} from "remix-plugin";
 import "./prettier/style.css";
 import prettier from "prettier/standalone";
 import prettierJavascript from "prettier/parser-babylon";
+import prettierSolidity from "prettier-plugin-solidity";
 // import Header from "./Header";
 import PackageDetailView from "./PackageDetailView";
 
@@ -12,10 +13,17 @@ const client = createIframeClient({
   devMode: {port: 8080}
 });
 
+// let prettier;
+// let prettierSolidity;
+//
+// (async () => {
+//   prettier = await import(/* webpackPreload: true */ "prettier/standalone");
+//   prettierSolidity = await import(
+//     /* webpackPreload: true */ "prettier-plugin-solidity"
+//   );
+// })();
+
 const App = () => {
-  const prettierSolidity = import(
-    /* webpackPreload: true */ "prettier-plugin-solidity"
-  );
   const [currentFile, setCurrentFile] = useState("");
   const [printWidth, setPrintWidth] = useState(80);
   const [tabWidth, setTabWidth] = useState(4);
