@@ -1,6 +1,5 @@
 import React, {lazy, Suspense} from "react";
 import {createIframeClient, remixApi} from "remix-plugin";
-// import Header from "./Header";
 import PackageDetailView from "./PackageDetailView";
 
 const Prettier = lazy(() => import("./Prettier"));
