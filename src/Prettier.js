@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from "react";
-import "./prettier/style.css";
 import NumberInput from "./formInputs/NumberInput";
 import CheckBox from "./formInputs/CheckBox";
 import Select from "./formInputs/Select";
@@ -30,7 +29,7 @@ const Prettier = ({client}) => {
   }, [client]);
 
   const prettify = async () => {
-    const content = await client.call("fileManager", "getFile", currentFile);
+    const content = await client.fileManager.getFile(currentFile);
     const prettified = prettier.format(content, {
       parser: "solidity-parse",
       plugins: [prettierSolidity],

@@ -1,5 +1,6 @@
 import React from "react";
 import classNames from "classnames";
+import "../prettier/style.css";
 
 const PrettierButton = ({currentFileSelected, currentFile, prettify}) => (
   <div className="list-group-item form-group">
