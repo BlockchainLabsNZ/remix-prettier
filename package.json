@@ -1,6 +1,6 @@
 {
   "name": "remix-prettier",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "A plugin for Remix, Ethereum-IDE that will apply formatting rules on Solidity code based on industry best practices.",
   "author": "Klaus Hott <klahott@gmail.com>",
   "license": "MIT",
@@ -12,14 +12,13 @@
     "@githubprimer/octicons-react": "^8.5.0",
     "bootstrap": "^4.3.1",
     "classnames": "^2.2.6",
-    "console-feed": "^2.8.8",
     "prettier": "^1.18.2",
-    "prettier-plugin-solidity": "BlockchainLabsNZ/prettier-plugin-solidity.git#standalone",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1",
+    "prettier-plugin-solidity": "1.0.0-alpha.32",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-scripts": "^3.1.1",
     "remix-plugin": "^0.0.2-alpha.11",
-    "styled-components": "^4.3.1"
+    "styled-components": "^4.3.2"
   },
   "devDependencies": {
     "react-app-rewired": "^2.1.3"

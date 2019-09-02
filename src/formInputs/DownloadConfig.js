@@ -6,9 +6,9 @@ const DownloadConfig = ({
   printWidth,
   tabWidth,
   useTabs,
+  singleQuote,
   bracketSpacing,
-  explicitTypes,
-  spacedExp
+  explicitTypes
 }) => (
   <div className="list-group-item form-group">
     <a
@@ -24,11 +24,11 @@ const DownloadConfig = ({
   printWidth: ${JSON.stringify(printWidth)},
   tabWidth: ${JSON.stringify(tabWidth)},
   useTabs: ${JSON.stringify(useTabs)},
+  singleQuote: ${JSON.stringify(singleQuote)},
   // Common configuration
   bracketSpacing: ${JSON.stringify(bracketSpacing)},
   // Solidity configuration
-  explicitTypes: ${JSON.stringify(explicitTypes)},
-  spacedExp: ${JSON.stringify(spacedExp)}
+  explicitTypes: ${JSON.stringify(explicitTypes)}
   }`,
               {parser: "babel", plugins: [prettierJavascript]}
             )

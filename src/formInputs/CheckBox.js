@@ -1,8 +1,7 @@
 import React from "react";
 
 const CheckBox = ({
-  value,
-  setter,
+  state: {value, setter},
   text,
   identifier,
   description,

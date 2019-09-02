@@ -12,10 +12,9 @@ const Prettier = ({client}) => {
   const [printWidth, setPrintWidth] = useState(80);
   const [tabWidth, setTabWidth] = useState(4);
   const [useTabs, setUseTabs] = useState(false);
-  // const [singleQuote, setSingleQuote] = useState(false);
+  const [singleQuote, setSingleQuote] = useState(false);
   const [bracketSpacing, setBracketSpacing] = useState(false);
   const [explicitTypes, setExplicitTypes] = useState("always");
-  const [spacedExp, setSpacedExp] = useState(false);
 
   useEffect(() => {
     const subscribeToCurrentFile = async () => {
@@ -36,9 +35,9 @@ const Prettier = ({client}) => {
       printWidth,
       tabWidth,
       useTabs,
+      singleQuote,
       bracketSpacing,
-      explicitTypes,
-      spacedExp
+      explicitTypes
     });
     client.fileManager.setFile(currentFile, prettified);
   };
@@ -48,37 +47,38 @@ const Prettier = ({client}) => {
       <form className="form-inline">
         <ul className="list-group list-group-flush">
           <NumberInput
-            value={printWidth}
-            setter={setPrintWidth}
+            state={{value: printWidth, setter: setPrintWidth}}
             text="--print-width"
             identifier="printWidth"
             description="The line length where Prettier will try wrap."
           />
           <NumberInput
-            value={tabWidth}
-            setter={setTabWidth}
+            state={{value: tabWidth, setter: setTabWidth}}
             text="--tab-width"
             identifier="tabWidth"
             description="Number of spaces per indentation level."
           />
           <CheckBox
-            value={useTabs}
-            setter={setUseTabs}
+            state={{value: useTabs, setter: setUseTabs}}
             text="--use-tabs"
             identifier="useTabs"
             description="Indent with tabs instead of spaces."
           />
           <CheckBox
-            value={bracketSpacing}
-            setter={setBracketSpacing}
+            state={{value: singleQuote, setter: setSingleQuote}}
+            text="--single-quote"
+            identifier="singleQuote"
+            description="Use single quotes instead of double quotes."
+          />
+          <CheckBox
+            state={{value: bracketSpacing, setter: setBracketSpacing}}
             text="--no-bracket-spacing"
             identifier="bracketSpacing"
             description="Do not print spaces between brackets."
             reversed={true}
           />
           <Select
-            value={explicitTypes}
-            setter={setExplicitTypes}
+            state={{value: explicitTypes, setter: setExplicitTypes}}
             text="--explicit-types"
             identifier="explicitTypes"
             description="Change when type aliases are used."
@@ -102,20 +102,13 @@ const Prettier = ({client}) => {
               Preserve
             </option>
           </Select>
-          <CheckBox
-            value={spacedExp}
-            setter={setSpacedExp}
-            text="--spaced-exp"
-            identifier="spacedExp"
-            description="Print spaces arround '**'."
-          />
           <DownloadConfig
             printWidth={printWidth}
             tabWidth={tabWidth}
             useTabs={useTabs}
+            singleQuote={singleQuote}
             bracketSpacing={bracketSpacing}
             explicitTypes={explicitTypes}
-            spacedExp={spacedExp}
           />
           <PrettierButton
             currentFileSelected={currentFile.length > 0}
