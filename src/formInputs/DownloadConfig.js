@@ -19,17 +19,24 @@ const DownloadConfig = ({
           [
             prettier.format(
               `// https://prettier.io/docs/en/configuration.html
-  module.exports = {
-  // Global configuration
-  printWidth: ${JSON.stringify(printWidth)},
-  tabWidth: ${JSON.stringify(tabWidth)},
-  useTabs: ${JSON.stringify(useTabs)},
-  singleQuote: ${JSON.stringify(singleQuote)},
-  // Common configuration
-  bracketSpacing: ${JSON.stringify(bracketSpacing)},
-  // Solidity configuration
-  explicitTypes: ${JSON.stringify(explicitTypes)}
-  }`,
+module.exports = {
+  overrides: [
+    {
+      files: "*.sol",
+      options: {
+        // Global configuration
+        printWidth: ${JSON.stringify(printWidth)},
+        tabWidth: ${JSON.stringify(tabWidth)},
+        useTabs: ${JSON.stringify(useTabs)},
+        singleQuote: ${JSON.stringify(singleQuote)},
+        // Common configuration
+        bracketSpacing: ${JSON.stringify(bracketSpacing)},
+        // Solidity configuration
+        explicitTypes: ${JSON.stringify(explicitTypes)}
+      }
+    }
+  ]
+};`,
               {parser: "babel", plugins: [prettierJavascript]}
             )
           ],
